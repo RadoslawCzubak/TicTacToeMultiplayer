@@ -1,4 +1,4 @@
-package pl.rczubak.tictactoemultiplayer.ui.theme
+package pl.rczubak.tictactoemultiplayer.core.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

@@ -1,4 +1,4 @@
-package pl.rczubak.tictactoemultiplayer.ui.theme
+package pl.rczubak.tictactoemultiplayer.core.theme
 
 import android.app.Activity
 import android.os.Build
