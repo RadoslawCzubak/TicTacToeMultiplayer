@@ -7,7 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import pl.rczubak.tictactoemultiplayer.core.theme.TicTacToeMultiplayerTheme
-import pl.rczubak.tictactoemultiplayer.features.tictactoeboard.TicTacToeBoardScreen
+import pl.rczubak.tictactoemultiplayer.features.tictactoeboard.presentation.TicTacToeBoardScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

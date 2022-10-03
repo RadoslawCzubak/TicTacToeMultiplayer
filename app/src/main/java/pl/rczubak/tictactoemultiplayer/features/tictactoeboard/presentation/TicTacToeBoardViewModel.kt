@@ -13,13 +13,15 @@ class TicTacToeBoardViewModel(
     private val _boardState = MutableStateFlow(GameBoardDisplayable.empty())
     val boardState: StateFlow<GameBoardDisplayable> = _boardState
 
-    private var player = false
+    private val _player = MutableStateFlow(false)
+    val player: StateFlow<Boolean> = _player
 
     fun makeMove(x: Int, y: Int) {
+        val currentPlayerValue = _player.value
         if (_boardState.value.board[x][y] != SquareState.EMPTY) return
         val board = _boardState.value.board.map { it.toMutableList() }.toMutableList()
-        board[x][y] = if (player) SquareState.X else SquareState.O
-        player = !player
+        board[x][y] = if (currentPlayerValue) SquareState.X else SquareState.O
+        _player.value = !currentPlayerValue
         _boardState.value = GameBoardDisplayable(board)
     }
 }
