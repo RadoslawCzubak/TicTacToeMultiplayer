@@ -1,31 +1,44 @@
 package pl.rczubak.tictactoemultiplayer.features.tictactoeboard.presentation
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.koinViewModel
 import pl.rczubak.tictactoemultiplayer.features.tictactoeboard.presentation.model.GameBoardDisplayable
-import pl.rczubak.tictactoemultiplayer.features.tictactoeboard.presentation.model.SquareState
+import pl.rczubak.tictactoemultiplayer.features.tictactoeboard.presentation.model.PlayerDisplayable
 
 @Composable
 fun TicTacToeBoardScreen(
     viewModel: TicTacToeBoardViewModel = koinViewModel()
 ) {
+    val context = LocalContext.current
     val boardState by viewModel.boardState.collectAsState()
-    val turnInfo by viewModel.player.collectAsState()
+    val winPath by viewModel.winPath.collectAsState()
+    val nextPlayer by viewModel.nextPlayer.collectAsState()
+
+    LaunchedEffect(key1 = winPath) {
+        if (winPath != null)
+            Toast.makeText(
+                context,
+                "${winPath!![0].first}${winPath!![0].second} ${winPath!![1].first}${winPath!![1].second} ${winPath!![2].first}${winPath!![2].second}",
+                Toast.LENGTH_LONG
+            ).show()
+    }
 
     GameView(
-        turnInfo = turnInfo,
         boardState = boardState,
         onSquareClick = {
             viewModel.makeMove(it.first, it.second)
@@ -35,7 +48,6 @@ fun TicTacToeBoardScreen(
 
 @Composable
 fun GameView(
-    turnInfo: Boolean,
     boardState: GameBoardDisplayable,
     onSquareClick: (Pair<Int, Int>) -> Unit
 ) {
@@ -44,7 +56,7 @@ fun GameView(
         verticalArrangement = Arrangement.SpaceAround,
         modifier = Modifier.fillMaxSize()
     ) {
-        TurnInfo(isPlayer1 = turnInfo)
+        TurnInfo(boardState.nextPlayer)
         GameBoardView(
             boardState = boardState,
             onSquareClick = onSquareClick
@@ -53,10 +65,10 @@ fun GameView(
 }
 
 @Composable
-fun TurnInfo(isPlayer1: Boolean) {
+fun TurnInfo(nextPlayer: PlayerDisplayable) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text("Player turn: ")
-        Square(squareState = if (isPlayer1) SquareState.X else SquareState.O, heightWidth = 30.dp)
+        Square(squareState = nextPlayer, heightWidth = 30.dp)
     }
 }
 
@@ -80,14 +92,14 @@ fun GameBoardView(
 
 @Composable
 fun Square(
-    squareState: SquareState,
+    squareState: PlayerDisplayable?,
     heightWidth: Dp = 90.dp,
     onClick: () -> Unit = {}
 ) {
     val backgroundColorModifier = when (squareState) {
-        SquareState.X -> Modifier.background(Color.Blue)
-        SquareState.O -> Modifier.background(Color.Red)
-        SquareState.EMPTY -> Modifier.background(Color.LightGray)
+        PlayerDisplayable.X -> Modifier.background(Color.Blue)
+        PlayerDisplayable.O -> Modifier.background(Color.Red)
+        null -> Modifier.background(Color.LightGray)
     }
 
     Box(
@@ -109,5 +121,5 @@ fun Square(
 )
 @Composable
 fun TicTacToeBoardPreview() {
-    GameView(true, GameBoardDisplayable.empty(), {})
+    GameView(GameBoardDisplayable.empty(), {})
 }
