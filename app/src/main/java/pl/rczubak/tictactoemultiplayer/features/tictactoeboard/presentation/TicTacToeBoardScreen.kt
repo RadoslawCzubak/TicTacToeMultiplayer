@@ -27,7 +27,6 @@ fun TicTacToeBoardScreen(
     val context = LocalContext.current
     val boardState by viewModel.boardState.collectAsState()
     val winPath by viewModel.winPath.collectAsState()
-    val nextPlayer by viewModel.nextPlayer.collectAsState()
 
     LaunchedEffect(key1 = winPath) {
         if (winPath != null)
