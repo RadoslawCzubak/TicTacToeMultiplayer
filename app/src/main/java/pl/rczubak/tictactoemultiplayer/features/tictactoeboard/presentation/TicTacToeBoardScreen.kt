@@ -56,7 +56,7 @@ fun GameView(
         verticalArrangement = Arrangement.SpaceAround,
         modifier = Modifier.fillMaxSize()
     ) {
-        TurnInfo(boardState.nextPlayer)
+        TurnInfo(boardState.turn)
         GameBoardView(
             boardState = boardState,
             onSquareClick = onSquareClick
@@ -65,10 +65,10 @@ fun GameView(
 }
 
 @Composable
-fun TurnInfo(nextPlayer: PlayerDisplayable) {
+fun TurnInfo(player: PlayerDisplayable) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text("Player turn: ")
-        Square(squareState = nextPlayer, heightWidth = 30.dp)
+        Square(squareState = player, heightWidth = 30.dp)
     }
 }
 

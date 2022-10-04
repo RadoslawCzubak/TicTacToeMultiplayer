@@ -10,22 +10,24 @@ data class GameBoard(
         get() = turn.getOppositePlayer()
 
     fun getWinPathIfGameEndElseNull(): List<Pair<Int, Int>>? {
-        //TODO: win checking doesn't work
-        for (row in board) {
+        board.forEachIndexed { rowIndex, row ->
             if (row.all { it == Player.X } || row.all { it == Player.O })
-                return row.map { Pair(board.indexOf(row), row.indexOf(it)) }
+                return List(row.size) { index -> Pair(rowIndex, index) }
         }
-        for (col in board.transpose()) {
+        board.transpose().forEachIndexed { colIndex, col ->
             if (col.all { it == Player.X } || col.all { it == Player.O })
-                return col.map { Pair(col.indexOf(it), board.indexOf(col)) }
+                return List(col.size) { index -> Pair(index, colIndex) }
         }
         val diagonals = listOf(
-            listOf(board[0][0], board[1][1], board[2][2]),
-            listOf(board[2][0], board[1][1], board[0][2])
+            listOf(Pair(0, 0), Pair(1, 1), Pair(2, 2)),
+            listOf(Pair(2, 0), Pair(1, 1), Pair(0, 2))
         )
         for (diagonal in diagonals) {
-            if (diagonal.all { it == Player.X } || diagonal.all { it == Player.O })
-                return diagonal.map { Pair(board.indexOf(diagonal), diagonal.indexOf(it)) }
+            val diagonalItems = diagonal.map { board[it.first][it.second] }
+            if (diagonalItems
+                    .all { it == Player.X } || diagonalItems.all { it == Player.O }
+            )
+                return diagonal
         }
         return null
     }
