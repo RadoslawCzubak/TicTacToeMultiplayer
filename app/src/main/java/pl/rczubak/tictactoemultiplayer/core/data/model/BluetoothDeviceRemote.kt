@@ -1,6 +1,7 @@
 package pl.rczubak.tictactoemultiplayer.core.data.model
 
 import android.bluetooth.BluetoothDevice
+import pl.rczubak.tictactoemultiplayer.core.utils.currentTimeInSecs
 
 data class BluetoothDeviceRemote(
     val deviceName: String,
@@ -11,7 +12,7 @@ data class BluetoothDeviceRemote(
     constructor(bluetoothDevice: BluetoothDevice) : this(
         bluetoothDevice.name,
         bluetoothDevice.address,
-        System.currentTimeMillis(),
+        currentTimeInSecs(),
         bluetoothDevice
     )
 }

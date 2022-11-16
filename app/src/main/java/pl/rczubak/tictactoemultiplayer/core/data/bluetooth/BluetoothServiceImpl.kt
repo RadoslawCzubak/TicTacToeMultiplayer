@@ -117,7 +117,6 @@ class BluetoothServiceImpl(
     @OptIn(ExperimentalCoroutinesApi::class)
     suspend fun connectToDevice(address: String) {
         return suspendCancellableCoroutine { continuation ->
-
             val device = visibleDevices.first { it.address == address }.bluetoothDevice
             connectionSocket =
                 device.createRfcommSocketToServiceRecord(CLIENT_UUID)
@@ -125,7 +124,7 @@ class BluetoothServiceImpl(
             bluetoothAdapter.cancelDiscovery()
             connectionSocket?.let { socket ->
                 socket.connect()
-                continuation.resume()
+                continuation.resume(Unit, onCancellation = null)
             }
 
             continuation.invokeOnCancellation {
